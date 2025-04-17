@@ -4,6 +4,10 @@
 'URL: 
 
 
+
+'[ ] Remove invalid data from textbox 
+'[ ] Set tab order
+'[ ] Validate odometer readings
 Option Explicit On
 Option Strict On
 Option Compare Binary
@@ -22,6 +26,7 @@ Public Class RentalForm
         MileageChargeTextBox.Text = ""
         TotalDiscountTextBox.Text = ""
         TotalChargeTextBox.Text = ""
+
 
     End Sub
 
@@ -92,70 +97,137 @@ Public Class RentalForm
     'Private Sub TotalChargeTextBox_TextChanged(sender As Object, e As EventArgs) Handles TotalChargeTextBox.TextChanged
     '    ValidateInput()
     'End Sub
+
+
+
+    Private Sub CalculateButton_Click(sender As Object, e As EventArgs) Handles CalculateButton.Click
+
+
+    End Sub
+
+    Private Sub SummaryButton_Click(sender As Object, e As EventArgs) Handles SummaryButton.Click
+        If ValidInputs() Then
+            Dim summary As String =
+            "Name: " & NameTextBox.Text & vbCrLf &
+            "Address: " & AddressTextBox.Text & vbCrLf &
+            "City: " & CityTextBox.Text & vbCrLf &
+            "State: " & StateTextBox.Text & vbCrLf &
+            "Zip Code: " & ZipCodeTextBox.Text & vbCrLf &
+            "Beginning Odometer: " & BeginOdometerTextBox.Text & vbCrLf &
+            "Ending Odometer: " & EndOdometerTextBox.Text & vbCrLf &
+            "Days: " & DaysTextBox.Text & vbCrLf &
+            "Total Miles: " & TotalMilesTextBox.Text & vbCrLf &
+            "Mileage Charge: " & MileageChargeTextBox.Text & vbCrLf &
+            "Total Discount: " & TotalDiscountTextBox.Text & vbCrLf &
+            "Total Charge: " & TotalChargeTextBox.Text
+
+            'Test box to see if stuff shoes up
+            MsgBox(summary, MsgBoxStyle.Information, "rental summary")
+        End If
+    End Sub
+
     Function ValidInputs() As Boolean
         Dim valid As Boolean = True
         Dim message As String
 
-        If NameTextBox.Text = "" Then
+        If NameTextBox.Text = "" Then 'OrElse not lettersOnly(NametextBox.text) then 'Optional letter only thing
             valid = False
+            NameTextBox.Clear()
             NameTextBox.Focus()
             message &= "Name must be added."
         End If
         If AddressTextBox.Text = "" Then
             valid = False
+            AddressTextBox.Clear()
             AddressTextBox.Focus()
-            message &= "Name must be added."
+            message &= "Address must be added."
         End If
         If CityTextBox.Text = "" Then
             valid = False
+            CityTextBox.Clear()
             CityTextBox.Focus()
-            message &= "Name must be added."
+            message &= "City must be added."
         End If
         If StateTextBox.Text = "" Then
             valid = False
+            StateTextBox.Clear()
             StateTextBox.Focus()
-            message &= "Name must be added."
+            message &= "State must be added."
         End If
         If ZipCodeTextBox.Text = "" Then
             valid = False
+            ZipCodeTextBox.Clear()
             ZipCodeTextBox.Focus()
-            message &= "Name must be added."
+            message &= "Zip must be added."
         End If
         If BeginOdometerTextBox.Text = "" Then
             valid = False
+            BeginOdometerTextBox.Clear()
             BeginOdometerTextBox.Focus()
-            message &= "Name must be added."
+            message &= "Beginning Odometer reading must be added."
         End If
         If EndOdometerTextBox.Text = "" Then
             valid = False
+            EndOdometerTextBox.Clear()
             EndOdometerTextBox.Focus()
-            message &= "Name must be added."
+            message &= "Final Odometer Reading must be added."
         End If
         If DaysTextBox.Text = "" Then
             valid = False
+            DaysTextBox.Clear()
             DaysTextBox.Focus()
-            message &= "Name must be added."
+            message &= "Days occupied must be added."
         End If
-        If TotalMilesTextBox.Text = "" Then
+        If CInt(BeginOdometerTextBox.Text) >= CInt(EndOdometerTextBox.Text) Then
             valid = False
-            TotalMilesTextBox.Focus()
-            message &= "Name must be added."
+            BeginOdometerTextBox.Clear()
+            EndOdometerTextBox.Clear()
+            message &= "Beginning odometer reading must be less than the odometer reading at return..."
         End If
-        If MileageChargeTextBox.Text = "" Then
-            valid = False
-            MileageChargeTextBox.Focus()
-            message &= "Name must be added."
-        End If
-        If TotalDiscountTextBox.Text = "" Then
-            valid = False
-            TotalDiscountTextBox.Focus()
-            message &= "Name must be added."
-        End If
-        If TotalChargeTextBox.Text = "" Then
-            valid = False
-            TotalChargeTextBox.Focus()
-            message &= "Name must be added."
+        'If TotalMilesTextBox.Text = "" Then
+        '    valid = False
+        '    TotalMilesTextBox.Clear()
+        '    TotalMilesTextBox.Focus()
+        '    message &= "Total Miles must be added."
+        'End If
+        'If MileageChargeTextBox.Text = "" Then
+        '    valid = False
+        '    MileageChargeTextBox.Clear()
+        '    MileageChargeTextBox.Focus()
+        '    message &= "Mileage Charge must be added."
+        'End If
+        'If TotalDiscountTextBox.Text = "" Then
+        '    valid = False
+        '    TotalDiscountTextBox.Clear()
+        '    TotalDiscountTextBox.Focus()
+        '    message &= "Total Discount must be added."
+        'End If
+        'If TotalChargeTextBox.Text = "" Then
+        '    valid = False
+        '    TotalChargeTextBox.Clear()
+        '    TotalChargeTextBox.Focus()
+        '    message &= "Total Charge must be added."
+        'End If
+        If Not valid Then
+            MsgBox(message, MsgBoxStyle.Exclamation, "User input fail")
         End If
         Return valid
     End Function
+
+    Private Sub ExitButton_Click(sender As Object, e As EventArgs) Handles ExitButton.Click
+        Me.Close()
+    End Sub
+    'Function LettersOnly(input As String) As Boolean
+    '    For Each c As Char In input
+    '        If Not Char.IsLetter(c) AndAlso Not Char.IsWhiteSpace(c) Then
+    '            Return False
+    '        End If
+    '    Next
+    '    Return True
+    'End Function
+
+    'Function NumbersOnly(input As String) As Boolean ' More optional functions
+    '    Return NumbersOnly(input)
+    'End Function
+
 End Class
