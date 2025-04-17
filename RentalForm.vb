@@ -217,6 +217,18 @@ Public Class RentalForm
     Private Sub ExitButton_Click(sender As Object, e As EventArgs) Handles ExitButton.Click
         Me.Close()
     End Sub
+
+    Private Sub NameTextBox_TextChanged(sender As Object, e As EventArgs) Handles NameTextBox.TextChanged
+
+    End Sub
+
+    Private Sub NameTextBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles NameTextBox.KeyPress, CityTextBox.KeyPress, StateTextBox.KeyPress
+        If Not Char.IsLetter(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) AndAlso Not Char.IsWhiteSpace(e.KeyChar) Then
+            e.Handled = True ' Cancel the keypress
+        End If
+    End Sub
+
+
     'Function LettersOnly(input As String) As Boolean
     '    For Each c As Char In input
     '        If Not Char.IsLetter(c) AndAlso Not Char.IsWhiteSpace(c) Then
