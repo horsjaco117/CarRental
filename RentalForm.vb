@@ -13,7 +13,7 @@ Option Strict On
 Option Compare Binary
 Public Class RentalForm
 
-    Sub SetDefaults()
+    Private Sub SetDefaults()
         NameTextBox.Text = ""
         AddressTextBox.Text = ""
         CityTextBox.Text = ""
@@ -126,7 +126,7 @@ Public Class RentalForm
         End If
     End Sub
 
-    Function ValidInputs() As Boolean
+    Private Function ValidInputs() As Boolean
         Dim valid As Boolean = True
         Dim message As String
 
@@ -224,9 +224,17 @@ Public Class RentalForm
 
     Private Sub NameTextBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles NameTextBox.KeyPress, CityTextBox.KeyPress, StateTextBox.KeyPress
         If Not Char.IsLetter(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) AndAlso Not Char.IsWhiteSpace(e.KeyChar) Then
-            e.Handled = True ' Cancel the keypress
+            e.Handled = True
         End If
     End Sub
+
+    Private Sub ZipCodeTextBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles ZipCodeTextBox.KeyPress, BeginOdometerTextBox.KeyPress, EndOdometerTextBox.KeyPress, DaysTextBox.KeyPress
+        If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
+            e.Handled = True
+        End If
+    End Sub
+
+
 
 
     'Function LettersOnly(input As String) As Boolean
