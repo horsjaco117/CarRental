@@ -8,6 +8,9 @@
 '[ ] Remove invalid data from textbox 
 '[ ] Set tab order
 '[ ] Validate odometer readings
+'[ ] Validate number of days
+'[ ] single message box to display an improper input
+
 Option Explicit On
 Option Strict On
 Option Compare Binary
@@ -30,7 +33,23 @@ Public Class RentalForm
 
     End Sub
 
-    'Sub ValidateInput()
+    Private Sub TotalMath()
+
+    End Sub
+
+    Private Function dailyDollars() As Integer
+        Dim dailyCharge As Integer
+        Dim days As Integer
+
+        If Integer.TryParse(DaysTextBox.Text, days) Then
+            dailyCharge = days * 15
+            Return dailyCharge
+        Else
+            Return 0
+        End If
+    End Function
+
+    'Private Sub ValidateInput()
     '    Dim nameValid As Boolean = Not String.IsNullOrWhiteSpace(NameTextBox.Text)
     '    Dim addressValid As Boolean = Not String.IsNullOrWhiteSpace(AddressTextBox.Text)
     '    Dim cityValid As Boolean = Not String.IsNullOrWhiteSpace(CityTextBox.Text)
@@ -102,7 +121,7 @@ Public Class RentalForm
 
     Private Sub CalculateButton_Click(sender As Object, e As EventArgs) Handles CalculateButton.Click
 
-
+        DayChargeTextBox.Text = dailyDollars.ToString
     End Sub
 
     Private Sub SummaryButton_Click(sender As Object, e As EventArgs) Handles SummaryButton.Click
@@ -233,6 +252,8 @@ Public Class RentalForm
             e.Handled = True
         End If
     End Sub
+
+
 
 
 
