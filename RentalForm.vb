@@ -48,80 +48,28 @@ Public Class RentalForm
             Return 0
         End If
     End Function
+    Private Function calculateMiles() As Integer
+        Dim BeginOdometer As Integer
+        Dim EndOdometer As Integer
+        Dim miles As Integer
 
-    'Private Sub ValidateInput()
-    '    Dim nameValid As Boolean = Not String.IsNullOrWhiteSpace(NameTextBox.Text)
-    '    Dim addressValid As Boolean = Not String.IsNullOrWhiteSpace(AddressTextBox.Text)
-    '    Dim cityValid As Boolean = Not String.IsNullOrWhiteSpace(CityTextBox.Text)
-    '    Dim stateValid As Boolean = Not String.IsNullOrWhiteSpace(StateTextBox.Text)
-    '    Dim zipValid As Boolean = Not String.IsNullOrWhiteSpace(ZipCodeTextBox.Text)
-    '    Dim beginOdom As Boolean = Not String.IsNullOrWhiteSpace(BeginOdometerTextBox.Text)
-    '    Dim endOdom As Boolean = Not String.IsNullOrWhiteSpace(EndOdometerTextBox.Text)
-    '    Dim days As Boolean = Not String.IsNullOrWhiteSpace(DaysTextBox.Text)
-    '    Dim totalMi As Boolean = Not String.IsNullOrWhiteSpace(TotalMilesTextBox.Text)
-    '    Dim mileageCharge As Boolean = Not String.IsNullOrWhiteSpace(TotalMilesTextBox.Text)
-    '    Dim discount As Boolean = Not String.IsNullOrWhiteSpace(TotalDiscountTextBox.Text)
-
-    '    Dim allValid As Boolean = nameValid And addressValid And cityValid And stateValid And zipValid And
-    '    beginOdom And endOdom And days And totalMi And mileageCharge And discount
-    'End Sub
-    'Private Sub NameTextBox_TextChanged(sender As Object, e As EventArgs) Handles NameTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-    'Private Sub AddressTextBox_TextChanged(sender As Object, e As EventArgs) Handles AddressTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-    'Private Sub CityTextBox_TextChanged(sender As Object, e As EventArgs) Handles CityTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-    'Private Sub StateTextBox_TextChanged(sender As Object, e As EventArgs) Handles StateTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-    'Private Sub ZipCodeTextBox_TextChanged(sender As Object, e As EventArgs) Handles ZipCodeTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-    'Private Sub BeginOdometerTextBox_TextChanged(sender As Object, e As EventArgs) Handles BeginOdometerTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-    'Private Sub EndOdometerTextBox_TextChanged(sender As Object, e As EventArgs) Handles EndOdometerTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-    'Private Sub DaysTextBox_TextChanged(sender As Object, e As EventArgs) Handles DaysTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-    'Private Sub TotalMilesTextBox_TextChanged(sender As Object, e As EventArgs) Handles TotalMilesTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-    'Private Sub MileageChargeTextBox_TextChanged(sender As Object, e As EventArgs) Handles MileageChargeTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-    'Private Sub DayChargeTextBox_TextChanged(sender As Object, e As EventArgs) Handles DayChargeTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-    'Private Sub TotalDiscountTextBox_TextChanged(sender As Object, e As EventArgs) Handles TotalDiscountTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-    'Private Sub TotalChargeTextBox_TextChanged(sender As Object, e As EventArgs) Handles TotalChargeTextBox.TextChanged
-    '    ValidateInput()
-    'End Sub
-
-
-
+        If Integer.TryParse(BeginOdometerTextBox.Text, BeginOdometer) AndAlso
+                Integer.TryParse(EndOdometerTextBox.Text, EndOdometer) Then
+            miles = EndOdometer - BeginOdometer
+            Return miles
+        Else
+            Return 0
+        End If
+    End Function
+    Private Function mileageCharge() As Double
+        Dim miles As Integer = calculateMiles()
+        Dim milesToMoney As Double = miles * 0.12
+        Return milesToMoney
+    End Function
     Private Sub CalculateButton_Click(sender As Object, e As EventArgs) Handles CalculateButton.Click
-
+        MileageChargeTextBox.Text = mileageCharge.ToString
         DayChargeTextBox.Text = dailyDollars.ToString
+        TotalMilesTextBox.Text = CStr(calculateMiles())
     End Sub
 
     Private Sub SummaryButton_Click(sender As Object, e As EventArgs) Handles SummaryButton.Click
@@ -237,38 +185,17 @@ Public Class RentalForm
         Me.Close()
     End Sub
 
-    Private Sub NameTextBox_TextChanged(sender As Object, e As EventArgs) Handles NameTextBox.TextChanged
 
-    End Sub
-
-    Private Sub NameTextBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles NameTextBox.KeyPress, CityTextBox.KeyPress, StateTextBox.KeyPress
+    Private Sub OnlyLetters(sender As Object, e As KeyPressEventArgs) Handles NameTextBox.KeyPress, CityTextBox.KeyPress, StateTextBox.KeyPress
         If Not Char.IsLetter(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) AndAlso Not Char.IsWhiteSpace(e.KeyChar) Then
             e.Handled = True
         End If
     End Sub
 
-    Private Sub ZipCodeTextBox_KeyPress(sender As Object, e As KeyPressEventArgs) Handles ZipCodeTextBox.KeyPress, BeginOdometerTextBox.KeyPress, EndOdometerTextBox.KeyPress, DaysTextBox.KeyPress
+    Private Sub OnlyNumbers(sender As Object, e As KeyPressEventArgs) Handles ZipCodeTextBox.KeyPress, BeginOdometerTextBox.KeyPress, EndOdometerTextBox.KeyPress, DaysTextBox.KeyPress
         If Not Char.IsDigit(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) AndAlso Not Char.IsControl(e.KeyChar) Then
             e.Handled = True
         End If
     End Sub
-
-
-
-
-
-
-    'Function LettersOnly(input As String) As Boolean
-    '    For Each c As Char In input
-    '        If Not Char.IsLetter(c) AndAlso Not Char.IsWhiteSpace(c) Then
-    '            Return False
-    '        End If
-    '    Next
-    '    Return True
-    'End Function
-
-    'Function NumbersOnly(input As String) As Boolean ' More optional functions
-    '    Return NumbersOnly(input)
-    'End Function
 
 End Class
