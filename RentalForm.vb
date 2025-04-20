@@ -137,8 +137,10 @@ Public Class RentalForm
             discount += 0.03
         End If
         If discount > 0 Then
-            totalCharge = totalCharge * discount
+            totalCharge -= totalCharge * discount
         End If
+
+        TotalDiscountTextBox.Text = discount.ToString("F2")
 
         TotalChargeTextBox.Text = "$" & totalCharge.ToString("F2")
         'ChargeSummary(True, CInt(totalCharge))
@@ -283,4 +285,19 @@ Public Class RentalForm
         End If
     End Sub
 
+    Private Sub ClearButton_Click(sender As Object, e As EventArgs) Handles ClearButton.Click
+        NameTextBox.Clear()
+        AddressTextBox.Clear()
+        CityTextBox.Clear()
+        StateTextBox.Clear()
+        ZipCodeTextBox.Clear()
+        BeginOdometerTextBox.Clear()
+        EndOdometerTextBox.Clear()
+        DaysTextBox.Clear()
+        TotalMilesTextBox.Clear()
+        MileageChargeTextBox.Clear()
+        DayChargeTextBox.Clear()
+        TotalDiscountTextBox.Clear()
+        TotalChargeTextBox.Clear()
+    End Sub
 End Class
