@@ -1,4 +1,7 @@
-﻿'Jacob Horsley
+﻿Option Explicit On
+Option Strict On
+Option Compare Binary
+'Jacob Horsley
 'RCET 0265
 'Spring 2025
 'URL: 
@@ -10,10 +13,12 @@
 '[ ] Validate odometer readings
 '[ ] Validate number of days
 '[ ] single message box to display an improper input
+'[ ] do special mile math for each range
+'[ ] add radio button functions discounts
+'[ ] 
 
-Option Explicit On
-Option Strict On
-Option Compare Binary
+Imports System.Net.Security
+
 Public Class RentalForm
 
     Private Sub SetDefaults()
@@ -48,29 +53,49 @@ Public Class RentalForm
             Return 0
         End If
     End Function
-    Private Function calculateMiles() As Integer
+    Private Function calculateMiles() As Double
         Dim BeginOdometer As Integer
         Dim EndOdometer As Integer
         Dim miles As Integer
+        Dim twelveCentMiles As Integer
+        Dim tenCentMiles As Integer
+        Dim _mileageCharge As Double
+
 
         If Integer.TryParse(BeginOdometerTextBox.Text, BeginOdometer) AndAlso
-                Integer.TryParse(EndOdometerTextBox.Text, EndOdometer) Then
+            Integer.TryParse(EndOdometerTextBox.Text, EndOdometer) Then
             miles = EndOdometer - BeginOdometer
-            Return miles
+            'Return miles
         Else
             Return 0
         End If
+
+        If MilesradioButton.Checked = True Then
+            twelveCentMiles = miles - 200
+            If twelveCentMiles > 0 Then
+                _mileageCharge += (twelveCentMiles * 0.12)
+            End If
+
+            tenCentMiles = twelveCentMiles - 300
+            If tenCentMiles > 0 Then
+                _mileageCharge += (tenCentMiles * 0.1)
+            End If
+        End If
+
+        MileageChargeTextBox.Text = _mileageCharge.ToString("F2")
+
+
+        Return _mileageCharge
     End Function
-    Private Function mileageCharge() As Double
-        Dim miles As Integer = calculateMiles()
-        Dim milesToMoney As Double = miles * 0.12
-        Return milesToMoney
-    End Function
+
     Private Sub CalculateButton_Click(sender As Object, e As EventArgs) Handles CalculateButton.Click
-        MileageChargeTextBox.Text = mileageCharge.ToString
+        Dim miles As Double = calculateMiles()
+        ' MileageChargeTextBox.Text = mileageMath(miles).ToString("F2")
+        ' Update other textboxes as needed
         DayChargeTextBox.Text = dailyDollars.ToString
-        TotalMilesTextBox.Text = CStr(calculateMiles())
+        TotalMilesTextBox.Text = CStr(miles)
     End Sub
+
 
     Private Sub SummaryButton_Click(sender As Object, e As EventArgs) Handles SummaryButton.Click
         If ValidInputs() Then
@@ -182,7 +207,13 @@ Public Class RentalForm
     End Function
 
     Private Sub ExitButton_Click(sender As Object, e As EventArgs) Handles ExitButton.Click
-        Me.Close()
+
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to exit?", "Confirm Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+
+        If result = DialogResult.Yes Then
+            Application.Exit()
+        End If
+
     End Sub
 
 
