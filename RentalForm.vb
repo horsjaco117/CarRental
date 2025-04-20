@@ -110,14 +110,14 @@ Public Class RentalForm
                     _mileageCharge = ((miles / 0.62) - 200) * 0.12
                 Case Else
                     tenCentMiles = (miles / 0.62) - 499
-                    'twelveCentMiles += (miles / 0.62) - tenCentMiles - 200
-                    '_mileageCharge += (twelveCentMiles * 0.12)
-                    '_mileageCharge += (tenCentMiles * 0.1)
-                    ' _mileageCharge = ((miles / 0.62) - 200) * 0.1
+                    twelveCentMiles += (miles / 0.62) - tenCentMiles - 200
+                    _mileageCharge += (twelveCentMiles * 0.12)
+                    _mileageCharge += (tenCentMiles * 0.1)
+                    _mileageCharge = ((miles / 0.62) - 200) * 0.1
             End Select
         End If
 
-        MileageChargeTextBox.Text = _mileageCharge.ToString("F2")
+        MileageChargeTextBox.Text = _mileageCharge.ToString("C2")
 
         Return _mileageCharge
 
@@ -127,29 +127,26 @@ Public Class RentalForm
         Dim miles As Double = calculateMiles()
         Dim discount As Double = 0
         Dim totalCharge As Double
-
+        Dim discountAmount As Double
 
         totalCharge = dailyDollars() + calculateMiles()
         If AAAcheckbox.Checked = True Then
             discount += 0.05
+            discountAmount = totalCharge * discount
         End If
         If Seniorcheckbox.Checked = True Then
             discount += 0.03
+            discountAmount = totalCharge * discount
         End If
         If discount > 0 Then
+            discountAmount = totalCharge * discount
             totalCharge -= totalCharge * discount
         End If
 
-        TotalDiscountTextBox.Text = discount.ToString("F2")
-
-        TotalChargeTextBox.Text = "$" & totalCharge.ToString("F2")
-        'ChargeSummary(True, CInt(totalCharge))
-
-        'CustomerSummary()
-        ' MileageChargeTextBox.Text = mileageMath(miles).ToString("F2")
-        ' Update other textboxes as needed
-        DayChargeTextBox.Text = dailyDollars.ToString
-        TotalMilesTextBox.Text = CStr(test())
+        TotalDiscountTextBox.Text = discountAmount.ToString("C2")
+        TotalChargeTextBox.Text = "$" & totalCharge.ToString("C2")
+        DayChargeTextBox.Text = dailyDollars.ToString("C2")
+        TotalMilesTextBox.Text = CStr(test() & " mi.")
     End Sub
 
 
