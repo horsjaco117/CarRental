@@ -53,13 +53,27 @@ Public Class RentalForm
             Return 0
         End If
     End Function
+    Private Function test() As Integer
+
+        Dim beginOdometer As Integer
+        Dim endOdometer As Integer
+        Dim totalMiles As Integer
+        If Integer.TryParse(BeginOdometerTextBox.Text, beginOdometer) AndAlso
+           Integer.TryParse(EndOdometerTextBox.Text, endOdometer) Then
+            totalMiles = endOdometer - beginOdometer
+            Return totalMiles
+        Else
+            Return 0
+        End If
+
+    End Function
     Private Function calculateMiles() As Double
         Dim BeginOdometer As Integer
         Dim EndOdometer As Integer
-        Dim miles As Integer
-        Dim kilometers As Integer
-        Dim twelveCentMiles As Integer
-        Dim tenCentMiles As Integer
+        Dim miles As Double
+        Dim kilometers As Double
+        Dim twelveCentMiles As Double
+        Dim tenCentMiles As Double
         Dim _mileageCharge As Double
 
 
@@ -72,49 +86,38 @@ Public Class RentalForm
         End If
 
         If MilesradioButton.Checked = True Then
-            'twelveCentMiles = miles - 200
-            'If twelveCentMiles > 0 Then
-            '    _mileageCharge += (twelveCentMiles * 0.12)
-            'End If
-
-            'tenCentMiles = twelveCentMiles - 300
-            'If tenCentMiles > 0 Then
-            '    _mileageCharge += (tenCentMiles * 0.1)
-            'End If
 
             Select Case miles
-                Case 201 To 499
-                    _mileageCharge = (miles - 200) * 0.12
                 Case 0 To 200
                     _mileageCharge = 0
+                Case 201 To 499
+                    _mileageCharge += (miles - 200) * 0.12
                 Case Else
-                    _mileageCharge = (miles - 200) * 0.1
+                    tenCentMiles = miles - 499
+                    twelveCentMiles += miles - tenCentMiles - 200
+                    _mileageCharge += (twelveCentMiles * 0.12)
+                    _mileageCharge += (tenCentMiles * 0.1)
+
             End Select
         End If
 
         If KilometersradioButton.Checked = True Then
-            'twelveCentMiles = miles - 200
-            'If twelveCentMiles > 0 Then
-            '    _mileageCharge += (twelveCentMiles * 0.12)
-            'End If
-
-            'tenCentMiles = twelveCentMiles - 300
-            'If tenCentMiles > 0 Then
-            '    _mileageCharge += (tenCentMiles * 0.1)
-            'End If
 
             Select Case kilometers
-                Case 201 To 499
-                    _mileageCharge = ((miles / 0.62) - 200) * 0.12
                 Case 0 To 200
                     _mileageCharge = 0
+                Case 201 To 499
+                    _mileageCharge = ((miles / 0.62) - 200) * 0.12
                 Case Else
-                    _mileageCharge = ((miles / 0.62) - 200) * 0.1
+                    tenCentMiles = (miles / 0.62) - 499
+                    'twelveCentMiles += (miles / 0.62) - tenCentMiles - 200
+                    '_mileageCharge += (twelveCentMiles * 0.12)
+                    '_mileageCharge += (tenCentMiles * 0.1)
+                    ' _mileageCharge = ((miles / 0.62) - 200) * 0.1
             End Select
         End If
 
         MileageChargeTextBox.Text = _mileageCharge.ToString("F2")
-
 
         Return _mileageCharge
 
@@ -122,10 +125,29 @@ Public Class RentalForm
 
     Private Sub CalculateButton_Click(sender As Object, e As EventArgs) Handles CalculateButton.Click
         Dim miles As Double = calculateMiles()
+        Dim discount As Double = 0
+        Dim totalCharge As Double
+
+
+        totalCharge = dailyDollars() + calculateMiles()
+        If AAAcheckbox.Checked = True Then
+            discount += 0.05
+        End If
+        If Seniorcheckbox.Checked = True Then
+            discount += 0.03
+        End If
+        If discount > 0 Then
+            totalCharge = totalCharge * discount
+        End If
+
+        TotalChargeTextBox.Text = "$" & totalCharge.ToString("F2")
+        'ChargeSummary(True, CInt(totalCharge))
+
+        'CustomerSummary()
         ' MileageChargeTextBox.Text = mileageMath(miles).ToString("F2")
         ' Update other textboxes as needed
         DayChargeTextBox.Text = dailyDollars.ToString
-        TotalMilesTextBox.Text = CStr(miles)
+        TotalMilesTextBox.Text = CStr(test())
     End Sub
 
 
