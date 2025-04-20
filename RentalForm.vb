@@ -57,6 +57,7 @@ Public Class RentalForm
         Dim BeginOdometer As Integer
         Dim EndOdometer As Integer
         Dim miles As Integer
+        Dim kilometers As Integer
         Dim twelveCentMiles As Integer
         Dim tenCentMiles As Integer
         Dim _mileageCharge As Double
@@ -71,21 +72,52 @@ Public Class RentalForm
         End If
 
         If MilesradioButton.Checked = True Then
-            twelveCentMiles = miles - 200
-            If twelveCentMiles > 0 Then
-                _mileageCharge += (twelveCentMiles * 0.12)
-            End If
+            'twelveCentMiles = miles - 200
+            'If twelveCentMiles > 0 Then
+            '    _mileageCharge += (twelveCentMiles * 0.12)
+            'End If
 
-            tenCentMiles = twelveCentMiles - 300
-            If tenCentMiles > 0 Then
-                _mileageCharge += (tenCentMiles * 0.1)
-            End If
+            'tenCentMiles = twelveCentMiles - 300
+            'If tenCentMiles > 0 Then
+            '    _mileageCharge += (tenCentMiles * 0.1)
+            'End If
+
+            Select Case miles
+                Case 201 To 499
+                    _mileageCharge = (miles - 200) * 0.12
+                Case 0 To 200
+                    _mileageCharge = 0
+                Case Else
+                    _mileageCharge = (miles - 200) * 0.1
+            End Select
+        End If
+
+        If KilometersradioButton.Checked = True Then
+            'twelveCentMiles = miles - 200
+            'If twelveCentMiles > 0 Then
+            '    _mileageCharge += (twelveCentMiles * 0.12)
+            'End If
+
+            'tenCentMiles = twelveCentMiles - 300
+            'If tenCentMiles > 0 Then
+            '    _mileageCharge += (tenCentMiles * 0.1)
+            'End If
+
+            Select Case kilometers
+                Case 201 To 499
+                    _mileageCharge = ((miles / 0.62) - 200) * 0.12
+                Case 0 To 200
+                    _mileageCharge = 0
+                Case Else
+                    _mileageCharge = ((miles / 0.62) - 200) * 0.1
+            End Select
         End If
 
         MileageChargeTextBox.Text = _mileageCharge.ToString("F2")
 
 
         Return _mileageCharge
+
     End Function
 
     Private Sub CalculateButton_Click(sender As Object, e As EventArgs) Handles CalculateButton.Click
