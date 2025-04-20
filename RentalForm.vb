@@ -103,17 +103,17 @@ Public Class RentalForm
 
         If KilometersradioButton.Checked = True Then
 
-            Select Case kilometers
+            Select Case miles
                 Case 0 To 200
                     _mileageCharge = 0
                 Case 201 To 499
-                    _mileageCharge = ((miles / 0.62) - 200) * 0.12
+                    _mileageCharge = (miles - 200) * 0.12
                 Case Else
-                    tenCentMiles = (miles / 0.62) - 499
-                    twelveCentMiles += (miles / 0.62) - tenCentMiles - 200
+                    tenCentMiles = (miles) - 499
+                    twelveCentMiles += (miles) - tenCentMiles - 200
                     _mileageCharge += (twelveCentMiles * 0.12)
                     _mileageCharge += (tenCentMiles * 0.1)
-                    _mileageCharge = ((miles / 0.62) - 200) * 0.1
+                    ' _mileageCharge = ((miles) - 200) * 0.1'
             End Select
         End If
 
@@ -146,7 +146,7 @@ Public Class RentalForm
         TotalDiscountTextBox.Text = discountAmount.ToString("C2")
         TotalChargeTextBox.Text = "$" & totalCharge.ToString("C2")
         DayChargeTextBox.Text = dailyDollars.ToString("C2")
-        TotalMilesTextBox.Text = CStr(test() & " mi.")
+        TotalMilesTextBox.Text = MeasureofDistance()
     End Sub
 
 
@@ -297,4 +297,19 @@ Public Class RentalForm
         TotalDiscountTextBox.Clear()
         TotalChargeTextBox.Clear()
     End Sub
+
+    Private Function MeasureofDistance() As String
+
+        Dim _measureOfDistance As String = " mi."
+        If MilesradioButton.Checked = True Then
+            _measureOfDistance = CStr(test()) & " mi."
+            Return _measureOfDistance
+        Else
+            _measureOfDistance = CStr(test()) & " km."
+            Return _measureOfDistance
+        End If
+
+    End Function
+
 End Class
+
