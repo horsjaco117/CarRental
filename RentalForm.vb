@@ -38,9 +38,6 @@ Public Class RentalForm
 
     End Sub
 
-    Private Sub TotalMath()
-
-    End Sub
 
     Private Function dailyDollars() As Integer
         Dim dailyCharge As Integer
@@ -124,10 +121,13 @@ Public Class RentalForm
     End Function
 
     Private Sub CalculateButton_Click(sender As Object, e As EventArgs) Handles CalculateButton.Click
+
         Dim miles As Double = calculateMiles()
         Dim discount As Double = 0
         Dim totalCharge As Double
         Dim discountAmount As Double
+
+        ValidInputs()
 
         totalCharge = dailyDollars() + calculateMiles()
         If AAAcheckbox.Checked = True Then
@@ -223,36 +223,24 @@ Public Class RentalForm
             DaysTextBox.Focus()
             message &= "Days occupied must be added."
         End If
-        If CInt(BeginOdometerTextBox.Text) >= CInt(EndOdometerTextBox.Text) Then
-            valid = False
-            BeginOdometerTextBox.Clear()
-            EndOdometerTextBox.Clear()
-            message &= "Beginning odometer reading must be less than the odometer reading at return..."
+        'If CInt(BeginOdometerTextBox.Text) >= CInt(EndOdometerTextBox.Text) Then
+        '    valid = False
+        '    BeginOdometerTextBox.Clear()
+        '    EndOdometerTextBox.Clear()
+        '    message &= "Beginning odometer reading must be less than the odometer reading at return..."
+        'End If
+
+        Dim beginningOdometer As Integer
+        Dim endOdometer As Integer
+        If Integer.TryParse(BeginOdometerTextBox.Text, beginningOdometer) AndAlso
+                Integer.TryParse(EndOdometerTextBox.Text, endOdometer) Then
+            If beginningOdometer >= endOdometer Then
+                valid = False
+                BeginOdometerTextBox.Clear()
+                EndOdometerTextBox.Clear()
+                message &= "Beggining odometer reading must be less than the odometer reading upon return."
+            End If
         End If
-        'If TotalMilesTextBox.Text = "" Then
-        '    valid = False
-        '    TotalMilesTextBox.Clear()
-        '    TotalMilesTextBox.Focus()
-        '    message &= "Total Miles must be added."
-        'End If
-        'If MileageChargeTextBox.Text = "" Then
-        '    valid = False
-        '    MileageChargeTextBox.Clear()
-        '    MileageChargeTextBox.Focus()
-        '    message &= "Mileage Charge must be added."
-        'End If
-        'If TotalDiscountTextBox.Text = "" Then
-        '    valid = False
-        '    TotalDiscountTextBox.Clear()
-        '    TotalDiscountTextBox.Focus()
-        '    message &= "Total Discount must be added."
-        'End If
-        'If TotalChargeTextBox.Text = "" Then
-        '    valid = False
-        '    TotalChargeTextBox.Clear()
-        '    TotalChargeTextBox.Focus()
-        '    message &= "Total Charge must be added."
-        'End If
         If Not valid Then
             MsgBox(message, MsgBoxStyle.Exclamation, "User input fail")
         End If
