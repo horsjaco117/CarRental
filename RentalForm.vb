@@ -4,7 +4,7 @@ Option Compare Binary
 'Jacob Horsley
 'RCET 0265
 'Spring 2025
-'URL: 
+'URL: https://github.com/horsjaco117/CarRental
 
 
 
@@ -147,34 +147,32 @@ Public Class RentalForm
         TotalChargeTextBox.Text = "$" & totalCharge.ToString("C2")
         DayChargeTextBox.Text = dailyDollars.ToString("C2")
         TotalMilesTextBox.Text = MeasureofDistance()
+
+        SummaryButton.Enabled = True
+
+        UserSummary(True)
+        MileSummary(True, CInt(miles))
+        MoneySummary(True, CInt(totalCharge))
     End Sub
 
 
     Private Sub SummaryButton_Click(sender As Object, e As EventArgs) Handles SummaryButton.Click
         If ValidInputs() Then
-            Dim summary As String =
-            "Name: " & NameTextBox.Text & vbCrLf &
-            "Address: " & AddressTextBox.Text & vbCrLf &
-            "City: " & CityTextBox.Text & vbCrLf &
-            "State: " & StateTextBox.Text & vbCrLf &
-            "Zip Code: " & ZipCodeTextBox.Text & vbCrLf &
-            "Beginning Odometer: " & BeginOdometerTextBox.Text & vbCrLf &
-            "Ending Odometer: " & EndOdometerTextBox.Text & vbCrLf &
-            "Days: " & DaysTextBox.Text & vbCrLf &
-            "Total Miles: " & TotalMilesTextBox.Text & vbCrLf &
-            "Mileage Charge: " & MileageChargeTextBox.Text & vbCrLf &
-            "Total Discount: " & TotalDiscountTextBox.Text & vbCrLf &
-            "Total Charge: " & TotalChargeTextBox.Text
+            Dim summary As String = ""
 
-            'Test box to see if stuff shoes up
-            MsgBox(summary, MsgBoxStyle.Information, "rental summary")
+            summary &= "Number of Customers: " & CStr(UserSummary(False)) & vbNewLine
+            summary &= "Total miles Accumulated: " & CStr(MileSummary(False, 0)) & " mi." & vbCrLf
+            summary &= "Total fees: " & CStr(MoneySummary(False, 0)) & vbCrLf
+            MsgBox(summary)
+            SetDefaults()
+
         End If
     End Sub
 
     Private Function ValidInputs() As Boolean
         Dim valid As Boolean = True
         Dim message As String
-
+        Dim dayLimit As Integer
         If NameTextBox.Text = "" Then 'OrElse not lettersOnly(NametextBox.text) then 'Optional letter only thing
             valid = False
             NameTextBox.Clear()
@@ -229,6 +227,12 @@ Public Class RentalForm
         '    EndOdometerTextBox.Clear()
         '    message &= "Beginning odometer reading must be less than the odometer reading at return..."
         'End If
+        If Not Integer.TryParse(DaysTextBox.Text, dayLimit) OrElse dayLimit < 1 OrElse dayLimit > 45 Then
+            valid = False
+            DaysTextBox.Clear()
+            DaysTextBox.Focus()
+            message &= "The allowable range of days for rental is 1 day minimum to 45 days maximum per rental"
+        End If
 
         Dim beginningOdometer As Integer
         Dim endOdometer As Integer
@@ -298,6 +302,40 @@ Public Class RentalForm
         End If
 
     End Function
+
+    Private Sub DaysTextBox_TextChanged(sender As Object, e As EventArgs) Handles DaysTextBox.TextChanged
+
+    End Sub
+
+    Private Sub RentalForm_Load(sender As Object, e As EventArgs) Handles Me.Load
+        SummaryButton.Enabled = False
+    End Sub
+
+    Function UserSummary(counting As Boolean) As Integer
+        Static _UserSummary As Integer
+
+        If counting = True Then
+            _UserSummary += 1
+        End If
+
+        Return _UserSummary
+    End Function
+
+    Function MileSummary(counting As Boolean, miles As Integer) As Double
+        Static _mileSummary As Double
+        If counting = True Then
+            _mileSummary += miles
+        End If
+        Return _mileSummary
+    End Function
+    Function MoneySummary(counting As Boolean, charge As Integer) As Double
+        Static _moneySummary As Double
+        If counting = True Then
+            _moneySummary += charge
+        End If
+        Return _moneySummary
+    End Function
+
 
 End Class
 
