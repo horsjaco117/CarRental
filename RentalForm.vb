@@ -22,6 +22,7 @@ Public Class RentalForm
         MileageChargeTextBox.Text = ""
         TotalDiscountTextBox.Text = ""
         TotalChargeTextBox.Text = ""
+        DayChargeTextBox.Text = ""
     End Sub
     Private Function dailyDollars() As Integer 'Daily charge for car rental is done here
         Dim dailyCharge As Integer
@@ -127,7 +128,7 @@ Public Class RentalForm
 
         'Conversions to string for the readability
         TotalDiscountTextBox.Text = discountAmount.ToString("C2")
-        TotalChargeTextBox.Text = "$" & totalCharge.ToString("C2")
+        TotalChargeTextBox.Text = totalCharge.ToString("C2")
         DayChargeTextBox.Text = dailyDollars.ToString("C2")
         TotalMilesTextBox.Text = MeasureofDistance()
 
@@ -170,7 +171,8 @@ Public Class RentalForm
 
             summary &= "Number of Customers: " & CStr(UserSummary(False)) & vbNewLine
             summary &= "Total miles Accumulated: " & CStr(MileSummary(False, 0)) & " mi." & vbCrLf
-            summary &= "Total fees: " & CStr(MoneySummary(False, 0)) & vbCrLf
+            summary &= "Total fees:" & (MoneySummary(False, 0).ToString("C2") & vbCrLf)
+
             MsgBox(summary)
             SetDefaults()
 

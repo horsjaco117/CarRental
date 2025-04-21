@@ -165,7 +165,6 @@ Partial Class RentalForm
         Me.NameTextBox.Size = New System.Drawing.Size(148, 26)
         Me.NameTextBox.TabIndex = 0
         Me.ToolTip1.SetToolTip(Me.NameTextBox, "Full Name entered here")
-        Me.NameTextBox.UseSystemPasswordChar = True
         '
         'AddressTextBox
         '
